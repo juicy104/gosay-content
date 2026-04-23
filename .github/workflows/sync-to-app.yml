@@ -35,13 +35,14 @@ jobs:
       - name: Commit and push if changed
         run: |
           cd app-repo
-          if git diff --quiet -- content/phrases content/phrases-index.md; then
+          git add content/phrases content/phrases-index.md
+
+          if git diff --cached --quiet -- content/phrases content/phrases-index.md; then
             echo "No content changes to sync"
             exit 0
           fi
 
           git config user.name "juicy"
           git config user.email "277392224+juicy104@users.noreply.github.com"
-          git add content/phrases content/phrases-index.md
           git commit -m "Sync content from gosay-content"
           git push origin HEAD:${{ vars.GOSAY_APP_BRANCH || 'main' }}
